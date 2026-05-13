@@ -15,6 +15,7 @@
 
   <div class="card">
     <h3>Alunos Presentes</h3>
+    <h4>Total: <span id="total">0</span></h4>
     <ul id="lista"></ul>
   </div>
 
@@ -30,15 +31,22 @@
 
       new QRCode(document.getElementById("qrcode"), {
         text: "https://joaovtpauletti.github.io/projeto-presenca/aluno.html?codigo=" + codigoAtual,
-        width: 200,
-        height: 200
+        width: 300,
+        height: 300
       });
     }
 
-    function atualizarLista() {
-      const lista = JSON.parse(localStorage.getItem("presencas")) || [];
-      const ul = document.getElementById("lista");
+    async function atualizarLista() {
+      const res = await fetch("https://api.jsonbin.io/v3/b/6a04ccaec0954111d81bf472/latest", {
+        headers: {
+          "X-Master-Key": "$2a$10$d7R2KUiNoHUW8lf/EU0.zu7mu9ylvKe/PT6KfonWzsOaSJ2fpSwWG"
+        }
+      });
 
+      const data = await res.json();
+      const lista = data.record.presencas;
+
+      const ul = document.getElementById("lista");
       ul.innerHTML = "";
 
       lista.forEach(nome => {
@@ -46,13 +54,11 @@
         li.innerText = nome + " ✔️";
         ul.appendChild(li);
       });
+
+      document.getElementById("total").innerText = lista.length;
     }
 
-    setInterval(() => {
-      gerarQR();
-      atualizarLista();
-    }, 3000);
-
+    setInterval(atualizarLista, 2000);
     gerarQR();
   </script>
 
