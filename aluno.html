@@ -43,7 +43,7 @@
 
         const distancia = calcularDistancia(lat, lng, salaLat, salaLng);
 
-        if (distancia < 0.2) {
+        if (distancia < 0.5) {
           await salvarPresenca(nome);
           document.getElementById("status").innerText = "✅ Presença confirmada";
         } else {
