@@ -11,6 +11,7 @@
   <div class="card">
     <h3>QR Code da Aula</h3>
     <div id="qrcode"></div>
+    <p>⏳ QR muda a cada 10 segundos</p>
   </div>
 
   <div class="card">
@@ -58,7 +59,9 @@
       document.getElementById("total").innerText = lista.length;
     }
 
+    setInterval(gerarQR, 10000); // troca QR a cada 10s
     setInterval(atualizarLista, 2000);
+
     gerarQR();
   </script>
 
