@@ -27,23 +27,37 @@
         return;
       }
 
-      if (!codigo) {
-        document.getElementById("status").innerText = "QR inválido";
-        return;
-      }
-
       salvarPresenca(nome);
-      document.getElementById("status").innerText = "✅ Presença confirmada";
     }
 
-    function salvarPresenca(nome) {
-      let lista = JSON.parse(localStorage.getItem("presencas")) || [];
+    async function salvarPresenca(nome) {
 
-      if (!lista.includes(nome)) {
-        lista.push(nome);
-      }
+      // pega lista atual
+      const res = await fetch("https://api.jsonbin.io/v3/b/6a04ccaec0954111d81bf472/latest", {
+        headers: {
+          "X-Master-Key": "$2a$10$d7R2KUiNoHUW8lf/EU0.zu7mu9ylvKe/PT6KfonWzsOaSJ2fpSwWG"
+        }
+      });
 
-      localStorage.setItem("presencas", JSON.stringify(lista));
+      const data = await res.json();
+      const listaAtual = data.record.presencas;
+
+      // adiciona nome
+      listaAtual.push(nome);
+
+      // salva de volta
+      await fetch("https://api.jsonbin.io/v3/b/6a04ccaec0954111d81bf472", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": "$2a$10$d7R2KUiNoHUW8lf/EU0.zu7mu9ylvKe/PT6KfonWzsOaSJ2fpSwWG"
+        },
+        body: JSON.stringify({
+          presencas: listaAtual
+        })
+      });
+
+      document.getElementById("status").innerText = "✅ Presença confirmada";
     }
   </script>
 
