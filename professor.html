@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Professor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>📊 Controle de Presença</h1>
+
+  <div class="card">
+    <h3>QR Code da Aula</h3>
+    <div id="qrcode"></div>
+  </div>
+
+  <div class="card">
+    <h3>Alunos Presentes</h3>
+    <ul id="lista"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+  <script>
+    let codigoAtual = "";
+
+    function gerarQR() {
+      codigoAtual = "AULA-" + Date.now();
+
+      document.getElementById("qrcode").innerHTML = "";
+
+      new QRCode(document.getElementById("qrcode"), {
+        text: "aluno.html?codigo=" + codigoAtual,
+        width: 200,
+        height: 200
+      });
+    }
+
+    function atualizarLista() {
+      const lista = JSON.parse(localStorage.getItem("presencas")) || [];
+      const ul = document.getElementById("lista");
+
+      ul.innerHTML = "";
+
+      lista.forEach(nome => {
+        const li = document.createElement("li");
+        li.innerText = nome + " ✔️";
+        ul.appendChild(li);
+      });
+    }
+
+    setInterval(() => {
+      gerarQR();
+      atualizarLista();
+    }, 3000);
+
+    gerarQR();
+  </script>
+
+</body>
+</html>
