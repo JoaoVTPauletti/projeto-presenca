@@ -12,7 +12,15 @@
     <input type="text" id="nome" placeholder="Seu nome">
     <br><br>
     <button onclick="validar()">Confirmar Presença</button>
+
     <p id="status"></p>
+    <p id="distancia"></p>
+
+    <div style="margin-top:20px;">
+      <div>📍 Sala</div>
+      <div style="height:2px; background:#ccc; margin:5px 0;"></div>
+      <div>👤 Você</div>
+    </div>
   </div>
 
   <script>
@@ -37,17 +45,21 @@
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
 
-        // coordenadas exemplo (pode ajustar)
-        const salaLat = -22.456810;
-        const salaLng = -48.965200;
+        // 🔥 COLOCA SUA LOCALIZAÇÃO AQUI
+        const salaLat = -23.561684;
+        const salaLng = -46.625378;
 
         const distancia = calcularDistancia(lat, lng, salaLat, salaLng);
 
-        if (distancia < 0.5) {
+        // 🔥 MOSTRAR DISTÂNCIA
+        document.getElementById("distancia").innerText =
+          "📍 Distância da sala: " + (distancia * 1000).toFixed(0) + " metros";
+
+        if (distancia < 0.3) {
           await salvarPresenca(nome);
           document.getElementById("status").innerText = "✅ Presença confirmada";
         } else {
-          document.getElementById("status").innerText = "❌ Você não está na sala";
+          document.getElementById("status").innerText = "❌ Você não está na área";
         }
 
       }, () => {
@@ -72,6 +84,9 @@
     }
 
     async function salvarPresenca(nome) {
+
+      // delay aleatório pra evitar conflito
+      await new Promise(r => setTimeout(r, Math.random() * 1000));
 
       const res = await fetch("https://api.jsonbin.io/v3/b/6a04ccaec0954111d81bf472/latest", {
         headers: {
