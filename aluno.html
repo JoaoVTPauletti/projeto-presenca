@@ -30,6 +30,12 @@
     function validar() {
       const nome = document.getElementById("nome").value;
 
+      // 🔥 BLOQUEIO POR DISPOSITIVO
+      if (localStorage.getItem("presencaEnviada")) {
+        document.getElementById("status").innerText = "⚠️ Presença já registrada neste dispositivo";
+        return;
+      }
+
       if (!nome) {
         document.getElementById("status").innerText = "Digite seu nome";
         return;
@@ -45,19 +51,25 @@
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
 
-        // 🔥 COLOCA SUA LOCALIZAÇÃO AQUI
-        const salaLat = -22.456810;
-        const salaLng = -48.965200;
+        // 📍 COLOQUE SUA LOCALIZAÇÃO REAL AQUI
+        const salaLat = -23.561684;
+        const salaLng = -46.625378;
 
         const distancia = calcularDistancia(lat, lng, salaLat, salaLng);
 
-        // 🔥 MOSTRAR DISTÂNCIA
+        // 📊 MOSTRAR DISTÂNCIA
         document.getElementById("distancia").innerText =
           "📍 Distância da sala: " + (distancia * 1000).toFixed(0) + " metros";
 
         if (distancia < 0.3) {
+
           await salvarPresenca(nome);
+
+          // 🔥 MARCA COMO ENVIADO
+          localStorage.setItem("presencaEnviada", "true");
+
           document.getElementById("status").innerText = "✅ Presença confirmada";
+
         } else {
           document.getElementById("status").innerText = "❌ Você não está na área";
         }
@@ -85,7 +97,7 @@
 
     async function salvarPresenca(nome) {
 
-      // delay aleatório pra evitar conflito
+      // delay pra evitar conflito
       await new Promise(r => setTimeout(r, Math.random() * 1000));
 
       const res = await fetch("https://api.jsonbin.io/v3/b/6a04ccaec0954111d81bf472/latest", {
