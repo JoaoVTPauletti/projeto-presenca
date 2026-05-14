@@ -23,10 +23,8 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
   <script>
-    let codigoAtual = "";
-
     function gerarQR() {
-      codigoAtual = "AULA-" + Date.now();
+      const codigoAtual = "AULA-" + Date.now();
 
       document.getElementById("qrcode").innerHTML = "";
 
@@ -59,7 +57,7 @@
       document.getElementById("total").innerText = lista.length;
     }
 
-    setInterval(gerarQR, 10000); // troca QR a cada 10s
+    setInterval(gerarQR, 10000);
     setInterval(atualizarLista, 2000);
 
     gerarQR();
