@@ -30,7 +30,7 @@
     function validar() {
       const nome = document.getElementById("nome").value;
 
-      // 🔥 BLOQUEIO POR DISPOSITIVO
+      // 🔒 BLOQUEIO POR DISPOSITIVO
       if (localStorage.getItem("presencaEnviada")) {
         document.getElementById("status").innerText = "⚠️ Presença já registrada neste dispositivo";
         return;
@@ -51,9 +51,9 @@
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
 
-        // 📍 COLOQUE SUA LOCALIZAÇÃO REAL AQUI
-        const salaLat = -22,33008;
-        const salaLng = -49,05205;
+        // 📍 SUA LOCALIZAÇÃO (AJUSTADA)
+        const salaLat = -22.33008;
+        const salaLng = -49.05205;
 
         const distancia = calcularDistancia(lat, lng, salaLat, salaLng);
 
@@ -65,7 +65,7 @@
 
           await salvarPresenca(nome);
 
-          // 🔥 MARCA COMO ENVIADO
+          // 🔒 MARCAR COMO ENVIADO
           localStorage.setItem("presencaEnviada", "true");
 
           document.getElementById("status").innerText = "✅ Presença confirmada";
@@ -97,7 +97,7 @@
 
     async function salvarPresenca(nome) {
 
-      // delay pra evitar conflito
+      // ⏱️ delay pra evitar conflito
       await new Promise(r => setTimeout(r, Math.random() * 1000));
 
       const res = await fetch("https://api.jsonbin.io/v3/b/6a04ccaec0954111d81bf472/latest", {
